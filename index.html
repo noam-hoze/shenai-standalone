@@ -1,233 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>B-Well Face Scan</title>
-    <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-          sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f0f2f5;
-      }
-      #container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        background-color: white;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        width: 90vw;
-        max-width: 420px;
-        text-align: center;
-      }
-      #mxcanvas {
-        width: 100%;
-        max-width: 400px;
-        height: 50vh;
-        background-color: #000;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-      }
-      button {
-        margin-top: 20px;
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        border-radius: 8px;
-        border: none;
-        background-color: #007aff;
-        color: white;
-        transition: background-color 0.2s;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      #backLink {
-        margin-top: 24px;
-        font-size: 14px;
-        color: #555;
-        text-decoration: none;
-      }
-      #backLink:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <canvas id="mxcanvas"></canvas>
-      <button id="startButton">Start Scan</button>
-    </div>
-
-    <div
-      id="resultsContainer"
-      style="
-        display: none;
-        text-align: left;
-        background-color: white;
-        padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        width: 90vw;
-        max-width: 420px;
-      "
-    >
-      <!-- Results will be injected here -->
-    </div>
-
-    <a
-      href="https://app.bwellai.com/dashboard"
-      id="backLink"
-      style="display: none; margin-top: 24px"
-      >Back to Dashboard</a
-    >
-
-    <script type="module">
-      console.log('💡 HTML Version 5.0');
-      const container = document.getElementById('container');
-      const startButton = document.getElementById('startButton');
-      const backLink = document.getElementById('backLink');
-      const resultsContainer = document.getElementById('resultsContainer');
-      let shenaiSdk;
-      let measurementInterval;
-
-      const log = (message) => {
-        console.log(message);
-      };
-
-      const logError = (message, error) => {
-        console.error(message, error);
-      };
-
-      const runTest = async () => {
-        log('Button clicked. Starting test...');
-        startButton.disabled = true;
-
-        try {
-          // Resolve the module path to an absolute URL to be Safari-compliant
-          const sdkPath = new URL('./sdk/index.mjs', import.meta.url).href + `?v=${Date.now()}`;
-          log(`Importing SDK from: ${sdkPath}`);
-          const sdkModule = await import(sdkPath);
-          log('SDK module imported.');
-
-          const sdkFactory = sdkModule.default;
-          if (typeof sdkFactory !== 'function') {
-            throw new Error('SDK module did not provide a default export function.');
-          }
-
-          shenaiSdk = await sdkFactory({
-            onRuntimeInitialized: () => log('Shen.AI Runtime Initialized.'),
-          });
-          log('SDK Factory executed.');
-
-          const apiKey = '25d226de9cfd4aa0a8790609f44909c7';
-          const settings = {
-            cameraMode: shenaiSdk.CameraMode.FACING_USER,
-            showUserInterface: true,
-            showFacePositioningOverlay: true,
-            enableStartAfterSuccess: true,
-            enableSummaryScreen: false,
-          };
-          log('Settings configured. Initializing SDK...');
-
-          shenaiSdk.initialize(apiKey, '', settings, (result) => {
-            log(
-              `Initialization callback received. Result object: ${JSON.stringify(result, null, 2)}`,
-            );
-            if (result === shenaiSdk.InitializationResult.OK) {
-              log('SDK Initialization successful.');
-              try {
-                log('Attaching to canvas #mxcanvas...');
-                shenaiSdk.attachToCanvas('#mxcanvas');
-                log('Successfully attached. Waiting for camera permission...');
-              } catch (attachError) {
-                logError('Failed to attach to canvas.', attachError);
-              }
-            } else {
-              logError(`SDK Initialization failed with code: ${result}`);
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>B-Well Face Scan</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f0f2f5;
             }
-          });
+            #container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background-color: white;
+                border-radius: 16px;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                width: 90vw;
+                max-width: 420px;
+                text-align: center;
+            }
+            #mxcanvas {
+                width: 100%;
+                max-width: 400px;
+                height: 50vh;
+                background-color: #000;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+            }
+            button {
+                margin-top: 20px;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                border-radius: 8px;
+                border: none;
+                background-color: #007aff;
+                color: white;
+                transition: background-color 0.2s;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            #backLink {
+                margin-top: 24px;
+                font-size: 14px;
+                color: #555;
+                text-decoration: none;
+            }
+            #backLink:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <canvas id="mxcanvas"></canvas>
+            <button id="startButton">Start Scan</button>
+        </div>
 
-          measurementInterval = setInterval(() => {
-            const measurementState = shenaiSdk.getMeasurementState();
-            if (measurementState === shenaiSdk.MeasurementState.FINISHED) {
-              clearInterval(measurementInterval);
-              log('Measurement finished. Getting results...');
+        <div
+            id="resultsContainer"
+            style="
+                display: none;
+                text-align: left;
+                background-color: white;
+                padding: 24px;
+                border-radius: 16px;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                width: 90vw;
+                max-width: 420px;
+            "
+        >
+            <!-- Results will be injected here -->
+        </div>
 
-              const results = shenaiSdk.getMeasurementResults();
-              const hr10s = shenaiSdk.getHeartRate10s();
-              const hr4s = shenaiSdk.getHeartRate4s();
+        <a
+            href="https://app.bwellai.com/"
+            id="backLink"
+            style="display: none; margin-top: 24px"
+            >Back to Dashboard</a
+        >
 
-              const fullResults = {
-                heart_rate_bpm: results.heart_rate_bpm,
-                hrv_sdnn_ms: results.hrv_sdnn_ms,
-                breathing_rate_bpm: results.breathing_rate_bpm,
-                stress_index: results.stress_index,
-                systolic_blood_pressure_mmhg: results.systolic_blood_pressure_mmhg,
-                diastolic_blood_pressure_mmhg: results.diastolic_blood_pressure_mmhg,
-                hr10s: hr10s,
-                hr4s: hr4s,
-              };
+        <script type="module">
+            console.log("💡 HTML Version 5.1");
+            const container = document.getElementById("container");
+            const startButton = document.getElementById("startButton");
+            const backLink = document.getElementById("backLink");
+            const resultsContainer =
+                document.getElementById("resultsContainer");
+            let shenaiSdk;
+            let measurementInterval;
 
-              log('Scan Results:', fullResults);
+            const log = (message) => {
+                console.log(message);
+            };
 
-              // Hide the scanning UI
-              container.style.display = 'none';
+            const logError = (message, error) => {
+                console.error(message, error);
+            };
 
-              // Prepare and display results
-              let resultsHtml =
-                '<h2 style="text-align: center; margin-bottom: 20px;">Health Scan Results</h2><ul style="list-style-type: none; padding: 0;">';
+            const runTest = async () => {
+                log("Button clicked. Starting test...");
+                startButton.disabled = true;
 
-              const metricNames = {
-                heart_rate_bpm: 'Heart Rate (BPM)',
-                hrv_sdnn_ms: 'Heart Rate Variability (ms)',
-                breathing_rate_bpm: 'Breathing Rate (BPM)',
-                stress_index: 'Stress Index',
-                systolic_blood_pressure_mmhg: 'Systolic Blood Pressure (mmHg)',
-                diastolic_blood_pressure_mmhg: 'Diastolic Blood Pressure (mmHg)',
-                hr10s: 'Heart Rate (10s avg)',
-                hr4s: 'Heart Rate (4s avg)',
-              };
+                try {
+                    // Resolve the module path to an absolute URL to be Safari-compliant
+                    const sdkPath =
+                        new URL("./sdk/index.mjs", import.meta.url).href +
+                        `?v=${Date.now()}`;
+                    log(`Importing SDK from: ${sdkPath}`);
+                    const sdkModule = await import(sdkPath);
+                    log("SDK module imported.");
 
-              for (const [key, value] of Object.entries(fullResults)) {
-                if (value !== undefined && value !== null) {
-                  const name = metricNames[key] || key;
-                  const formattedValue = typeof value === 'number' ? value.toFixed(1) : value;
-                  resultsHtml += `<li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;"><strong>${name}:</strong> <span>${formattedValue}</span></li>`;
+                    const sdkFactory = sdkModule.default;
+                    if (typeof sdkFactory !== "function") {
+                        throw new Error(
+                            "SDK module did not provide a default export function."
+                        );
+                    }
+
+                    shenaiSdk = await sdkFactory({
+                        onRuntimeInitialized: () =>
+                            log("Shen.AI Runtime Initialized."),
+                    });
+                    log("SDK Factory executed.");
+
+                    const apiKey = "25d226de9cfd4aa0a8790609f44909c7";
+                    const settings = {
+                        cameraMode: shenaiSdk.CameraMode.FACING_USER,
+                        showUserInterface: true,
+                        showFacePositioningOverlay: true,
+                        enableStartAfterSuccess: true,
+                        enableSummaryScreen: false,
+                    };
+                    log("Settings configured. Initializing SDK...");
+
+                    shenaiSdk.initialize(apiKey, "", settings, (result) => {
+                        log(
+                            `Initialization callback received. Result object: ${JSON.stringify(
+                                result,
+                                null,
+                                2
+                            )}`
+                        );
+                        if (result === shenaiSdk.InitializationResult.OK) {
+                            log("SDK Initialization successful.");
+                            try {
+                                log("Attaching to canvas #mxcanvas...");
+                                shenaiSdk.attachToCanvas("#mxcanvas");
+                                log(
+                                    "Successfully attached. Waiting for camera permission..."
+                                );
+                            } catch (attachError) {
+                                logError(
+                                    "Failed to attach to canvas.",
+                                    attachError
+                                );
+                            }
+                        } else {
+                            logError(
+                                `SDK Initialization failed with code: ${result}`
+                            );
+                        }
+                    });
+
+                    measurementInterval = setInterval(() => {
+                        const measurementState =
+                            shenaiSdk.getMeasurementState();
+                        if (
+                            measurementState ===
+                            shenaiSdk.MeasurementState.FINISHED
+                        ) {
+                            clearInterval(measurementInterval);
+                            log("Measurement finished. Getting results...");
+
+                            const results = shenaiSdk.getMeasurementResults();
+                            const hr10s = shenaiSdk.getHeartRate10s();
+                            const hr4s = shenaiSdk.getHeartRate4s();
+
+                            const fullResults = {
+                                heart_rate_bpm: results.heart_rate_bpm,
+                                hrv_sdnn_ms: results.hrv_sdnn_ms,
+                                breathing_rate_bpm: results.breathing_rate_bpm,
+                                stress_index: results.stress_index,
+                                systolic_blood_pressure_mmhg:
+                                    results.systolic_blood_pressure_mmhg,
+                                diastolic_blood_pressure_mmhg:
+                                    results.diastolic_blood_pressure_mmhg,
+                                hr10s: hr10s,
+                                hr4s: hr4s,
+                            };
+
+                            log("Scan Results:", fullResults);
+
+                            // Hide the scanning UI
+                            container.style.display = "none";
+
+                            // Prepare and display results
+                            let resultsHtml =
+                                '<h2 style="text-align: center; margin-bottom: 20px;">Health Scan Results</h2><ul style="list-style-type: none; padding: 0;">';
+
+                            const metricNames = {
+                                heart_rate_bpm: "Heart Rate (BPM)",
+                                hrv_sdnn_ms: "Heart Rate Variability (ms)",
+                                breathing_rate_bpm: "Breathing Rate (BPM)",
+                                stress_index: "Stress Index",
+                                systolic_blood_pressure_mmhg:
+                                    "Systolic Blood Pressure (mmHg)",
+                                diastolic_blood_pressure_mmhg:
+                                    "Diastolic Blood Pressure (mmHg)",
+                                hr10s: "Heart Rate (10s avg)",
+                                hr4s: "Heart Rate (4s avg)",
+                            };
+
+                            for (const [key, value] of Object.entries(
+                                fullResults
+                            )) {
+                                if (value !== undefined && value !== null) {
+                                    const name = metricNames[key] || key;
+                                    const formattedValue =
+                                        typeof value === "number"
+                                            ? value.toFixed(1)
+                                            : value;
+                                    resultsHtml += `<li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;"><strong>${name}:</strong> <span>${formattedValue}</span></li>`;
+                                }
+                            }
+                            resultsHtml += "</ul>";
+
+                            // Add a Scan Again button
+                            resultsHtml +=
+                                '<button id="scanAgainButton" style="width: 100%; margin-top: 20px; padding: 12px 24px; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 8px; border: none; background-color: #007aff; color: white;">Scan Again</button>';
+
+                            resultsContainer.innerHTML = resultsHtml;
+                            resultsContainer.style.display = "block";
+                            backLink.style.display = "block";
+
+                            document
+                                .getElementById("scanAgainButton")
+                                .addEventListener("click", () => {
+                                    window.location.reload();
+                                });
+                        }
+                    }, 500);
+                } catch (error) {
+                    logError("A fatal error occurred during the test.", error);
+                    startButton.disabled = false;
                 }
-              }
-              resultsHtml += '</ul>';
+            };
 
-              // Add a Scan Again button
-              resultsHtml +=
-                '<button id="scanAgainButton" style="width: 100%; margin-top: 20px; padding: 12px 24px; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 8px; border: none; background-color: #007aff; color: white;">Scan Again</button>';
-
-              resultsContainer.innerHTML = resultsHtml;
-              resultsContainer.style.display = 'block';
-              backLink.style.display = 'block';
-
-              document.getElementById('scanAgainButton').addEventListener('click', () => {
-                window.location.reload();
-              });
-            }
-          }, 500);
-        } catch (error) {
-          logError('A fatal error occurred during the test.', error);
-          startButton.disabled = false;
-        }
-      };
-
-      startButton.addEventListener('click', runTest);
-    </script>
-  </body>
+            startButton.addEventListener("click", runTest);
+        </script>
+    </body>
 </html>

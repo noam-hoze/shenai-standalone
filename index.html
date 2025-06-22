@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shen.ai SDK Minimal Test</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      #mxcanvas {
+        width: 90vw;
+        max-width: 400px;
+        height: 50vh;
+        background-color: #000;
+        border: 1px solid #ccc;
+      }
+      button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+        background-color: #007aff;
+        color: white;
+      }
+      #status {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        width: 90%;
+        max-width: 400px;
+        box-sizing: border-box;
+        max-height: 20vh;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="color: red; font-weight: bold; font-size: 24px; margin: 20px">
+      VERSION: 3.0 FINAL
+    </div>
+    <canvas id="mxcanvas"></canvas>
+    <button id="startButton">Start Scan Test</button>
+    <div id="status">Awaiting test start...</div>
+
+    <script type="module">
+      console.log('💡 HTML Version 3.0 FINAL');
+      const startButton = document.getElementById('startButton');
+      const statusDiv = document.getElementById('status');
+      let shenaiSdk;
+
+      const log = (message) => {
+        console.log(message);
+        const currentText = statusDiv.textContent;
+        statusDiv.textContent = `${new Date().toLocaleTimeString()}: ${message}\n` + currentText;
+      };
+
+      const logError = (message, error) => {
+        console.error(message, error);
+        const currentText = statusDiv.textContent;
+        statusDiv.textContent =
+          `${new Date().toLocaleTimeString()}: ERROR: ${message}\n` + currentText;
+      };
+
+      const runTest = async () => {
+        log('Button clicked. Starting test...');
+        startButton.disabled = true;
+
+        try {
+          // Resolve the module path to an absolute URL to be Safari-compliant
+          const sdkPath = new URL('./sdk/index.mjs', import.meta.url).href + `?v=${Date.now()}`;
+          log(`Importing SDK from: ${sdkPath}`);
+          const sdkModule = await import(sdkPath);
+          log('SDK module imported.');
+
+          const sdkFactory = sdkModule.default;
+          if (typeof sdkFactory !== 'function') {
+            throw new Error('SDK module did not provide a default export function.');
+          }
+
+          shenaiSdk = await sdkFactory({
+            onRuntimeInitialized: () => log('Shen.AI Runtime Initialized.'),
+          });
+          log('SDK Factory executed.');
+
+          const apiKey = '25d226de9cfd4aa0a8790609f44909c7';
+          const settings = {
+            cameraMode: shenaiSdk.CameraMode.FACING_USER,
+            showUserInterface: true,
+            showFacePositioningOverlay: true,
+            enableStartAfterSuccess: true,
+            enableSummaryScreen: false,
+          };
+          log('Settings configured. Initializing SDK...');
+
+          shenaiSdk.initialize(apiKey, '', settings, (result) => {
+            log(
+              `Initialization callback received. Result object: ${JSON.stringify(result, null, 2)}`,
+            );
+            if (result === shenaiSdk.InitializationResult.OK) {
+              log('SDK Initialization successful.');
+              try {
+                log('Attaching to canvas #mxcanvas...');
+                shenaiSdk.attachToCanvas('#mxcanvas');
+                log('Successfully attached. Waiting for camera permission...');
+              } catch (attachError) {
+                logError('Failed to attach to canvas.', attachError);
+              }
+            } else {
+              logError(`SDK Initialization failed with code: ${result}`);
+            }
+          });
+        } catch (error) {
+          logError('A fatal error occurred during the test.', error);
+          startButton.disabled = false;
+        }
+      };
+
+      startButton.addEventListener('click', runTest);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "minimal-shen-test",
+  "version": "1.0.0",
+  "description": "Minimal test case for Shen.ai SDK on iOS",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "selfsigned": "^2.4.1"
+  }
+}

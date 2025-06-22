@@ -85,15 +85,12 @@
             <!-- Results will be injected here -->
         </div>
 
-        <a
-            href="https://app.bwellai.com/"
-            id="backLink"
-            style="display: none; margin-top: 24px"
+        <a href="#" id="backLink" style="display: none; margin-top: 24px"
             >Back to Dashboard</a
         >
 
         <script type="module">
-            console.log("💡 HTML Version 5.1");
+            console.log("💡 HTML Version 5.2");
             const container = document.getElementById("container");
             const startButton = document.getElementById("startButton");
             const backLink = document.getElementById("backLink");
@@ -260,6 +257,10 @@
             };
 
             startButton.addEventListener("click", runTest);
+            backLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                history.back();
+            });
         </script>
     </body>
 </html>

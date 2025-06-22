@@ -180,80 +180,75 @@
                             clearInterval(measurementInterval);
                             log("Measurement finished. Getting results...");
 
-                            // Add a small delay to prevent a race condition on iOS
-                            setTimeout(() => {
-                                const results =
-                                    shenaiSdk.getMeasurementResults();
-                                const hr10s = shenaiSdk.getHeartRate10s();
-                                const hr4s = shenaiSdk.getHeartRate4s();
+                            const results = shenaiSdk.getMeasurementResults();
+                            const hr10s = shenaiSdk.getHeartRate10s();
+                            const hr4s = shenaiSdk.getHeartRate4s();
 
-                                const fullResults = {
-                                    heart_rate_bpm: results.heart_rate_bpm,
-                                    hrv_sdnn_ms: results.hrv_sdnn_ms,
-                                    breathing_rate_bpm:
-                                        results.breathing_rate_bpm,
-                                    stress_index: results.stress_index,
-                                    systolic_blood_pressure_mmhg:
-                                        results.systolic_blood_pressure_mmhg,
-                                    diastolic_blood_pressure_mmhg:
-                                        results.diastolic_blood_pressure_mmhg,
-                                    hr10s: hr10s,
-                                    hr4s: hr4s,
-                                };
+                            const fullResults = {
+                                heart_rate_bpm: results.heart_rate_bpm,
+                                hrv_sdnn_ms: results.hrv_sdnn_ms,
+                                breathing_rate_bpm: results.breathing_rate_bpm,
+                                stress_index: results.stress_index,
+                                systolic_blood_pressure_mmhg:
+                                    results.systolic_blood_pressure_mmhg,
+                                diastolic_blood_pressure_mmhg:
+                                    results.diastolic_blood_pressure_mmhg,
+                                hr10s: hr10s,
+                                hr4s: hr4s,
+                            };
 
-                                log("Scan Results:", fullResults);
+                            log("Scan Results:", fullResults);
 
-                                // Hide the scanning UI
-                                container.style.display = "none";
+                            // Hide the scanning UI
+                            container.style.display = "none";
 
-                                // Prepare and display results
-                                let resultsHtml =
-                                    '<h2 style="text-align: center; margin-bottom: 20px;">Health Scan Results</h2><ul style="list-style-type: none; padding: 0;">';
+                            // Prepare and display results
+                            let resultsHtml =
+                                '<h2 style="text-align: center; margin-bottom: 20px;">Health Scan Results</h2><ul style="list-style-type: none; padding: 0;">';
 
-                                const metricNames = {
-                                    heart_rate_bpm: "Heart Rate (BPM)",
-                                    hrv_sdnn_ms: "Heart Rate Variability (ms)",
-                                    breathing_rate_bpm: "Breathing Rate (BPM)",
-                                    stress_index: "Stress Index",
-                                    systolic_blood_pressure_mmhg:
-                                        "Systolic Blood Pressure (mmHg)",
-                                    diastolic_blood_pressure_mmhg:
-                                        "Diastolic Blood Pressure (mmHg)",
-                                    hr10s: "Heart Rate (10s avg)",
-                                    hr4s: "Heart Rate (4s avg)",
-                                };
+                            const metricNames = {
+                                heart_rate_bpm: "Heart Rate (BPM)",
+                                hrv_sdnn_ms: "Heart Rate Variability (ms)",
+                                breathing_rate_bpm: "Breathing Rate (BPM)",
+                                stress_index: "Stress Index",
+                                systolic_blood_pressure_mmhg:
+                                    "Systolic Blood Pressure (mmHg)",
+                                diastolic_blood_pressure_mmhg:
+                                    "Diastolic Blood Pressure (mmHg)",
+                                hr10s: "Heart Rate (10s avg)",
+                                hr4s: "Heart Rate (4s avg)",
+                            };
 
-                                for (const [key, value] of Object.entries(
-                                    fullResults
-                                )) {
-                                    if (value !== undefined && value !== null) {
-                                        const name = metricNames[key] || key;
-                                        const formattedValue =
-                                            typeof value === "number"
-                                                ? value.toFixed(1)
-                                                : value;
-                                        resultsHtml += `<li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;"><strong>${name}:</strong> <span>${formattedValue}</span></li>`;
-                                    }
+                            for (const [key, value] of Object.entries(
+                                fullResults
+                            )) {
+                                if (value !== undefined && value !== null) {
+                                    const name = metricNames[key] || key;
+                                    const formattedValue =
+                                        typeof value === "number"
+                                            ? value.toFixed(1)
+                                            : value;
+                                    resultsHtml += `<li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;"><strong>${name}:</strong> <span>${formattedValue}</span></li>`;
                                 }
-                                resultsHtml += "</ul>";
+                            }
+                            resultsHtml += "</ul>";
 
-                                // Add a Scan Again button
-                                resultsHtml +=
-                                    '<button id="scanAgainButton" style="width: 100%; margin-top: 20px; padding: 12px 24px; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 8px; border: none; background-color: #007aff; color: white;">Scan Again</button>';
+                            // Add a Scan Again button
+                            resultsHtml +=
+                                '<button id="scanAgainButton" style="width: 100%; margin-top: 20px; padding: 12px 24px; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 8px; border: none; background-color: #007aff; color: white;">Scan Again</button>';
 
-                                resultsContainer.innerHTML = resultsHtml;
-                                resultsContainer.style.display = "block";
+                            resultsContainer.innerHTML = resultsHtml;
+                            resultsContainer.style.display = "block";
 
-                                document
-                                    .getElementById("scanAgainButton")
-                                    .addEventListener("click", () => {
-                                        window.location.reload();
-                                    });
-                            }, 200);
+                            document
+                                .getElementById("scanAgainButton")
+                                .addEventListener("click", () => {
+                                    window.location.reload();
+                                });
                         }
                     }, 500);
                 } catch (error) {
-                    logError("An error occurred during the test run.", error);
+                    logError("A fatal error occurred during the test.", error);
                     startButton.disabled = false;
                 }
             };

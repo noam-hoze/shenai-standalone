@@ -1,11 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
 function App() {
     const [scanState, setScanState] = useState("idle"); // 'idle', 'scanning', 'complete'
     const [results, setResults] = useState(null);
+    const [authToken, setAuthToken] = useState(null);
     const canvasRef = useRef(null);
     const shenaiSdkRef = useRef(null);
+
+    useEffect(() => {
+        // Extract auth token from URL on component mount
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("token");
+        if (token) {
+            setAuthToken(token);
+        }
+    }, []);
 
     const handleStartScan = async () => {
         setScanState("scanning");
@@ -117,6 +127,11 @@ function App() {
             return;
         }
 
+        if (!authToken) {
+            console.error("Authentication token not available.");
+            return;
+        }
+
         try {
             const response = await fetch(
                 "https://api-dev.bwellai.com/bwell/wearable/face/data/save",
@@ -124,6 +139,7 @@ function App() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${authToken}`,
                     },
                     body: JSON.stringify(results),
                 }
@@ -148,7 +164,7 @@ function App() {
     const handleBackToDashboard = (e) => {
         if (e) e.preventDefault();
         // This should probably use React Router if this were a larger app
-        window.history.back();
+        window.location.href = "https://localhost:8080/face-scan";
     };
 
     const renderScanContainer = () => {

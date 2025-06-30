@@ -15,10 +15,11 @@ function App() {
         const token = urlParams.get("token");
         if (token) {
             setAuthToken(token);
+            handleStartScan(token); // Automatically start scan when token is available
         }
     }, []);
 
-    const handleStartScan = async () => {
+    const handleStartScan = async (token) => {
         setScanState("scanning");
         const log = (message) => console.log(message);
         const logError = (message, error) => console.error(message, error);

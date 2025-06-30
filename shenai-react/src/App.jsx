@@ -111,12 +111,38 @@ function App() {
         window.location.reload();
     };
 
-    const handleKeepAndAdd = () => {
-        // In a real application, you would handle the logic for saving the trend data here.
-        // For this example, we'll just log a message and then redirect or update the UI.
-        console.log("Results saved (simulated).");
-        // For demonstration, let's go back to the dashboard.
-        handleBackToDashboard();
+    const handleKeepAndAdd = async () => {
+        if (!results) {
+            console.error("No scan results to save.");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                "https://api-dev.bwellai.com/bwell/wearable/face/data/save",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(results),
+                }
+            );
+
+            if (response.ok) {
+                console.log("You have successfully Saved");
+                // For demonstration, let's go back to the dashboard.
+                handleBackToDashboard();
+            } else {
+                console.error(
+                    "Failed to save results:",
+                    response.status,
+                    await response.text()
+                );
+            }
+        } catch (error) {
+            console.error("Error saving results:", error);
+        }
     };
 
     const handleBackToDashboard = (e) => {

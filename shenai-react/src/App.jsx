@@ -56,7 +56,7 @@ function App() {
                     log("SDK Initialization successful.");
                     try {
                         log("Attaching to canvas #mxcanvas...");
-                        shenaiSdk.attachToCanvas("mxcanvas");
+                        shenaiSdk.attachToCanvas(canvasRef.current);
                         log(
                             "Successfully attached. Waiting for camera permission..."
                         );

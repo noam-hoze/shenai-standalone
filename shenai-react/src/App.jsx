@@ -5,6 +5,7 @@ function App() {
     const [scanState, setScanState] = useState("idle"); // 'idle', 'scanning', 'complete'
     const [results, setResults] = useState(null);
     const [authToken, setAuthToken] = useState(null);
+    const [progress, setProgress] = useState(0);
     const canvasRef = useRef(null);
     const shenaiSdkRef = useRef(null);
 
@@ -79,14 +80,21 @@ function App() {
             });
 
             const measurementInterval = setInterval(() => {
-                const measurementState = shenaiSdk.getMeasurementState();
-                if (measurementState === shenaiSdk.MeasurementState.FINISHED) {
+                const sdk = shenaiSdkRef.current;
+                if (!sdk) return;
+
+                // Get real-time progress from the SDK
+                const currentProgress = sdk.getMeasurementProgressPercentage();
+                setProgress(currentProgress);
+
+                const measurementState = sdk.getMeasurementState();
+                if (measurementState === sdk.MeasurementState.FINISHED) {
                     clearInterval(measurementInterval);
                     log("Measurement finished. Getting results...");
 
-                    const scanResults = shenaiSdk.getMeasurementResults();
-                    const hr10s = shenaiSdk.getHeartRate10s();
-                    const hr4s = shenaiSdk.getHeartRate4s();
+                    const scanResults = sdk.getMeasurementResults();
+                    const hr10s = sdk.getHeartRate10s();
+                    const hr4s = sdk.getHeartRate4s();
 
                     const fullResults = {
                         heart_rate_bpm: scanResults.heart_rate_bpm,
@@ -245,6 +253,20 @@ function App() {
 
         return (
             <div id="container">
+                {scanState === "scanning" && (
+                    <div className="progress-container">
+                        <div className="progress-text">
+                            <span>Scanning in progress...</span>
+                            <span>{Math.round(progress)}%</span>
+                        </div>
+                        <div className="progress-bar">
+                            <div
+                                className="progress-indicator"
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                )}
                 <canvas id="mxcanvas" ref={canvasRef}></canvas>
                 <button
                     id="startButton"

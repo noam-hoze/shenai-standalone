@@ -24,21 +24,21 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    max-width: 448px; /* max-w-md from Tailwind */
+    margin: 2rem auto; /* Center the container and add some margin */
     padding: 24px;
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    width: 90vw;
-    max-width: 420px;
     text-align: center;
 }
 #mxcanvas {
     width: 100%;
-    max-width: 400px;
-    height: 50vh;
+    height: auto;
+    aspect-ratio: 3 / 4; /* Maintain aspect ratio */
     background-color: #000;
     border-radius: 8px;
-    border: 1px solid #ddd;
 }
 button {
     margin-top: 20px;

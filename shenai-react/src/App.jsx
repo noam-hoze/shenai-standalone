@@ -8,18 +8,20 @@ function App() {
     const [progress, setProgress] = useState(0);
     const canvasRef = useRef(null);
     const shenaiSdkRef = useRef(null);
+    const scanStartedRef = useRef(false);
 
     useEffect(() => {
         // Extract auth token from URL on component mount
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get("token");
-        if (token) {
+        if (token && !scanStartedRef.current) {
+            scanStartedRef.current = true;
             setAuthToken(token);
-            handleStartScan(token); // Automatically start scan when token is available
+            handleStartScan(); // Automatically start scan when token is available
         }
     }, []);
 
-    const handleStartScan = async (token) => {
+    const handleStartScan = async () => {
         setScanState("scanning");
         const log = (message) => console.log(message);
         const logError = (message, error) => console.error(message, error);
@@ -68,7 +70,7 @@ function App() {
                     log("SDK Initialization successful.");
                     try {
                         log("Attaching to canvas #mxcanvas...");
-                        shenaiSdk.attachToCanvas(canvasRef.current);
+                        shenaiSdk.attachToCanvas("#mxcanvas");
                         log(
                             "Successfully attached. Waiting for camera permission..."
                         );

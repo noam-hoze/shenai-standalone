@@ -269,20 +269,6 @@ function App() {
                     </div>
                 )}
                 <canvas id="mxcanvas" ref={canvasRef}></canvas>
-                <button
-                    id="startButton"
-                    onClick={handleStartScan}
-                    disabled={scanState === "scanning"}
-                >
-                    {scanState === "scanning" ? "Scanning..." : "Start Scan"}
-                </button>
-                <a
-                    href="#"
-                    className="action-link"
-                    onClick={handleBackToDashboard}
-                >
-                    Go Back to Dashboard
-                </a>
             </div>
         );
     };

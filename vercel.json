@@ -4,7 +4,7 @@
             "src": "shenai-react/package.json",
             "use": "@vercel/static-build",
             "config": {
-                "distDir": "shenai-react/dist"
+                "distDir": "dist"
             }
         }
     ],

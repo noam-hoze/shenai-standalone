@@ -2,20 +2,21 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
     background-color: #f0f2f5;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .App {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 2rem 1rem;
+    max-width: 48rem; /* Equivalent to max-w-3xl */
     gap: 2rem;
 }
 
@@ -25,8 +26,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 448px; /* max-w-md from Tailwind */
-    margin: 2rem auto; /* Center the container and add some margin */
+    max-width: 448px; /* max-w-md */
     padding: 24px;
     background-color: white;
     border-radius: 16px;

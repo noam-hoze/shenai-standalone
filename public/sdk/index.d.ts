@@ -26,6 +26,7 @@ export interface MeasurementResults {
   cardiac_workload_mmhg_per_sec: number | null;
   age_years: number | null;
   bmi_kg_per_m2: number | null;
+  bmi_category: BmiCategory | null;
   weight_kg: number | null;
   height_cm: number | null;
   heartbeats: Heartbeat[];
@@ -268,6 +269,7 @@ export interface ShenaiSDK extends ShenaiSDKEnums {
   selectCameraByDeviceId: (deviceId: string, facingUser?: boolean) => void;
   setEnableFullFrameProcessing: (enable: boolean) => void;
   getEnableFullFrameProcessing: () => boolean;
+  setMediaStream: (stream: MediaStream, facingUser?: boolean) => void;
 
   // SDK interface elements
   setShowUserInterface: (show: boolean) => void;
@@ -370,6 +372,17 @@ export interface ShenaiSDK extends ShenaiSDKEnums {
   // SDK configuration
   getSDKConfigString: () => string;
   applySDKConfig(configJson: string): void;
+
+  // Email sending
+  sendMeasurementResultsPdfToEmail: (
+    email: string,
+    callback: (success: boolean) => void
+  ) => void;
+  openMeasurementResultsPdfInBrowser: () => void;
+  getMeasurementResultsPdfUrl: (callback: (url: string) => void) => void;
+  getMeasurementResultsPdfBytes: (
+    callback: (bytes: Uint8Array) => void
+  ) => void;
 }
 
 export function createPreloadDisplay(canvasId: string): void;

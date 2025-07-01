@@ -168,6 +168,18 @@ export const NAFLDRisk = new Proxy({}, {
   }
 });
 
+export const BmiCategory = new Proxy({}, {
+  get(_, prop) { return _getEnum("BmiCategory", prop); },
+  has(_, prop) { return prop in ((_sdk && _sdk.BmiCategory) || {}); },
+  ownKeys() { return Object.keys((_sdk && _sdk.BmiCategory) || {}); },
+  getOwnPropertyDescriptor(target, prop) {
+    if (!(prop in target) && (prop in ((_sdk && _sdk.BmiCategory) || {}))) {
+      Object.defineProperty(target, prop, { value: _getEnum("BmiCategory", prop), writable: false, enumerable: true, configurable: false });
+    }
+    return Reflect.getOwnPropertyDescriptor(target, prop);
+  }
+});
+
 export const HypertensionTreatment = new Proxy({}, {
   get(_, prop) { return _getEnum("HypertensionTreatment", prop); },
   has(_, prop) { return prop in ((_sdk && _sdk.HypertensionTreatment) || {}); },

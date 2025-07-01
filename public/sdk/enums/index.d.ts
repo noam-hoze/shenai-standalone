@@ -70,7 +70,7 @@ export namespace HealthIndex {
 }
 
 export interface MeasurementPreset {
-  readonly value: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  readonly value: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 }
 export namespace MeasurementPreset {
   const ONE_MINUTE_HR_HRV_BR: MeasurementPreset;
@@ -80,17 +80,18 @@ export namespace MeasurementPreset {
   const FOURTY_FIVE_SECONDS_UNVALIDATED: MeasurementPreset;
   const THIRTY_SECONDS_UNVALIDATED: MeasurementPreset;
   const CUSTOM: MeasurementPreset;
-  const CLINICAL_TRIAL: MeasurementPreset;
+  const ONE_MINUTE_ALL_METRICS: MeasurementPreset;
+  const FOURTY_FIVE_SECONDS_ALL_METRICS: MeasurementPreset;
+  const THIRTY_SECONDS_ALL_METRICS: MeasurementPreset;
 }
 
 export interface InitializationMode {
-  readonly value: 0 | 1 | 2 | 3;
+  readonly value: 0 | 1 | 2;
 }
 export namespace InitializationMode {
   const MEASUREMENT: InitializationMode;
   const CALIBRATION: InitializationMode;
   const CALIBRATED_MEASUREMENT: InitializationMode;
-  const CLINICAL_TRIAL_BP: InitializationMode;
 }
 
 export interface CalibrationState {
@@ -103,13 +104,14 @@ export namespace CalibrationState {
 }
 
 export interface CameraMode {
-  readonly value: 0 | 1 | 2 | 3;
+  readonly value: 0 | 1 | 2 | 3 | 4;
 }
 export namespace CameraMode {
   const OFF: CameraMode;
   const FACING_USER: CameraMode;
   const FACING_ENVIRONMENT: CameraMode;
   const DEVICE_ID: CameraMode;
+  const MEDIA_STREAM: CameraMode;
 }
 
 export interface OnboardingMode {
@@ -132,7 +134,7 @@ export namespace InitializationResult {
 }
 
 export interface FaceState {
-  readonly value: 0 | 1 | 2 | 3 | 4 | 5;
+  readonly value: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
 export namespace FaceState {
   const OK: FaceState;
@@ -140,6 +142,7 @@ export namespace FaceState {
   const TOO_CLOSE: FaceState;
   const NOT_CENTERED: FaceState;
   const NOT_VISIBLE: FaceState;
+  const TURNED_AWAY: FaceState;
   const UNKNOWN: FaceState;
 }
 
@@ -164,6 +167,20 @@ export namespace NAFLDRisk {
   const LOW: NAFLDRisk;
   const MODERATE: NAFLDRisk;
   const HIGH: NAFLDRisk;
+}
+
+export interface BmiCategory {
+  readonly value: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+}
+export namespace BmiCategory {
+  const UNDERWEIGHT_SEVERE: BmiCategory;
+  const UNDERWEIGHT_MODERATE: BmiCategory;
+  const UNDERWEIGHT_MILD: BmiCategory;
+  const NORMAL: BmiCategory;
+  const OVERWEIGHT: BmiCategory;
+  const OBESE_CLASS_I: BmiCategory;
+  const OBESE_CLASS_II: BmiCategory;
+  const OBESE_CLASS_III: BmiCategory;
 }
 
 export interface HypertensionTreatment {
@@ -237,6 +254,7 @@ export interface ShenaiSDKEnums {
   readonly FaceState: typeof FaceState;
   readonly MeasurementState: typeof MeasurementState;
   readonly NAFLDRisk: typeof NAFLDRisk;
+  readonly BmiCategory: typeof BmiCategory;
   readonly HypertensionTreatment: typeof HypertensionTreatment;
   readonly Gender: typeof Gender;
   readonly Race: typeof Race;

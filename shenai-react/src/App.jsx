@@ -174,8 +174,8 @@ function App() {
 
     const handleBackToDashboard = (e) => {
         if (e) e.preventDefault();
-        // This should probably use React Router if this were a larger app
-        window.location.href = "https://localhost:8080/face-scan";
+        const baseUrl = import.meta.env.VITE_BWELL_BASE_URL;
+        window.location.href = `${baseUrl}/face-scan`;
     };
 
     const renderScanContainer = () => {

@@ -125,7 +125,7 @@ body {
   display: block;
   background: none;
   border: none;
-  color: var(--wellness-bright-green);
+  color: black;
   cursor: pointer;
 }
 

@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Build development version
-RUN npm run build:development
+RUN npm run build
 
 # Expose port
 EXPOSE 3000

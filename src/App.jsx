@@ -113,8 +113,10 @@ function App() {
                         parasympathetic_activity:
                             scanResults.parasympathetic_activity,
                         bmi_kg_per_m2: scanResults.bmi_kg_per_m2,
+                        age_years: scanResults.age_years,
                         hr10s: hr10s,
                         hr4s: hr4s,
+                        tag: "before_bedtime",
                     };
 
                     log("Scan Results:", fullResults);

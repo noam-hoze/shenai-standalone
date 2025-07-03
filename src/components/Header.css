@@ -1,7 +1,7 @@
 /* General */
 :root {
   --wellness-bright-green: #22c55e; /* green-500 */
-  --wellness-light-green: #f0fdf4; /* green-50 */
+  --wellness-light-green: #ADD4B2;
   --gray-100: #f3f4f6;
   --gray-600: #4b5563;
   --white: #ffffff;
@@ -38,11 +38,14 @@ body {
 .header-left {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 4rem;
 }
 
 .logo-img {
   height: 2rem;
+  position: relative;
+  top: 4px;
+  left: 15px;
 }
 
 /* Desktop Navigation */
@@ -54,6 +57,7 @@ body {
   .nav-desktop {
     display: flex;
     gap: 1rem;
+    margin-left: -8px;
   }
 }
 
@@ -106,6 +110,9 @@ body {
   border-radius: 9999px;
   cursor: pointer;
   transition: background-color 0.2s;
+  position: relative;
+  top: -8px;
+  right: 15px;
 }
 
 .profile-button:hover {
@@ -121,7 +128,7 @@ body {
 .profile-icon {
     width: 1.5rem;
     height: 1.5rem;
-    color: var(--wellness-bright-green);
+    color: #284A32;
 }
 
 /* Mobile Menu */

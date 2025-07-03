@@ -23,13 +23,41 @@ const Header = () => {
     };
 
     const navLinks = [
-        { path: import.meta.env.VITE_BWELL_BASE_URL, label: "Home", icon: Home },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/reports", label: "Reports", icon: FileText },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/sleep", label: "Sleep", icon: Moon },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/activity", label: "Activity", icon: Activity },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/nutrition", label: "Nutrition", icon: Leaf },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/goals", label: "My Goals", icon: Flag },
-        { path: import.meta.env.VITE_BWELL_BASE_URL + "/wallet", label: "Wallet", icon: Wallet },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL,
+            label: "Home",
+            icon: Home,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/reports",
+            label: "Reports",
+            icon: FileText,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/sleep",
+            label: "Sleep",
+            icon: Moon,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/activity",
+            label: "Activity",
+            icon: Activity,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/nutrition",
+            label: "Nutrition",
+            icon: Leaf,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/goals",
+            label: "My Goals",
+            icon: Flag,
+        },
+        {
+            path: import.meta.env.VITE_BWELL_BASE_URL + "/wallet",
+            label: "Wallet",
+            icon: Wallet,
+        },
     ];
 
     return (

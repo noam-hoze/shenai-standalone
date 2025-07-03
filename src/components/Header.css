@@ -73,17 +73,6 @@ body {
   transition: color 0.2s, background-color 0.2s;
 }
 
-.nav-link:hover {
-  color: var(--wellness-bright-green);
-  background-color: var(--wellness-light-green);
-}
-
-.nav-link.active {
-  color: var(--wellness-bright-green);
-  background-color: var(--wellness-light-green);
-  font-weight: 500;
-}
-
 .nav-link.active::after {
   content: '';
   display: none;

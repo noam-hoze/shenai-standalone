@@ -118,7 +118,7 @@ const Header = () => {
                                     </Link>
                                 ))}
                                 <Link
-                                    to="/profile"
+                                    to={import.meta.env.VITE_BWELL_BASE_URL + "/profile"}
                                     className={`nav-link-mobile ${
                                         isActive("/profile") ? "active" : ""
                                     }`}
@@ -137,7 +137,7 @@ const Header = () => {
 
                     <button
                         className="profile-button"
-                        onClick={() => navigate("/profile")}
+                        onClick={() => window.location.href = import.meta.env.VITE_BWELL_BASE_URL + "/profile"}
                     >
                         <UserCircle className="profile-icon" />
                     </button>

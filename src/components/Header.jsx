@@ -64,7 +64,7 @@ const Header = () => {
         <header className="header">
             <div className="container">
                 <div className="header-left">
-                    <Link to="/" className="logo">
+                    <Link to={import.meta.env.VITE_BWELL_BASE_URL} className="logo">
                         <img
                             src="/lovable-uploads/765ffe1f-7f04-4b14-88a1-feb2561263a2.png"
                             alt="B-Well Logo"

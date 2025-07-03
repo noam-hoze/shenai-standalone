@@ -1,7 +1,9 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
-function App() {
+function ScanPage() {
     const [scanState, setScanState] = useState("idle"); // 'idle', 'scanning', 'complete'
     const [results, setResults] = useState(null);
     const [authToken, setAuthToken] = useState(null);
@@ -184,7 +186,6 @@ function App() {
         if (scanState === "complete") {
             return (
                 <div id="completionContainer">
-                    
                     <h2 className="completion-header">Face Scan Complete</h2>
                     <div className="completion-actions">
                         <button
@@ -282,26 +283,6 @@ function App() {
         <div className="App">
             {renderScanContainer()}
             <div id="resultsContainer" className="results-container">
-                <button
-                    className="action-button secondary"
-                    onClick={handleBackToDashboard}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path d="M19 12H5" />
-                        <path d="M12 19l-7-7 7-7" />
-                    </svg>
-                    Back to Dashboard
-                </button>
                 <h1 className="results-header">Health Check Results</h1>
                 <div className="results-grid">
                     {/* Heart Rate Card */}
@@ -711,6 +692,32 @@ function App() {
                 </div>
             </div>
         </div>
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <Header />
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<ScanPage />} />
+                    <Route path="/reports" element={<div>Reports Page</div>} />
+                    <Route path="/sleep" element={<div>Sleep Page</div>} />
+                    <Route
+                        path="/activity"
+                        element={<div>Activity Page</div>}
+                    />
+                    <Route
+                        path="/nutrition"
+                        element={<div>Nutrition Page</div>}
+                    />
+                    <Route path="/goals" element={<div>My Goals Page</div>} />
+                    <Route path="/wallet" element={<div>Wallet Page</div>} />
+                    <Route path="/profile" element={<div>Profile Page</div>} />
+                </Routes>
+            </main>
+        </Router>
     );
 }
 

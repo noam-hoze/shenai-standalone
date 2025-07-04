@@ -13,7 +13,7 @@ build_and_run_shen_dev:
     - docker build -t shen-standalone .
     - sh deploy.sh || echo "No deploy.sh, continuing..."
     - docker rm -f shen-standalone || true
-    - docker run --name shen-standalone --restart always -p 3006:3000 -d shen-standalone
+    - docker run --name shen-standalone --restart always -p 3006:80 -d shen-standalone
 
 build_and_run_shen_prod:
   stage: prod-deploy
@@ -24,4 +24,4 @@ build_and_run_shen_prod:
     - docker build -t shen-standalone -f Dockerfile_Prod .
     - sh deploy.sh || echo "No deploy.sh, continuing..."
     - docker rm -f shen-standalone || true
-    - docker run --name shen-standalone --restart always -p 3006:3000 -d shen-standalone
+    - docker run --name shen-standalone --restart always -p 3006:80 -d shen-standalone

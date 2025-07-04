@@ -1,21 +1,19 @@
-# Use official Node.js 22 base image
-FROM node:22-alpine
+# Build stage
+FROM node:22-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 
-# Copy all source files
 COPY . .
+RUN npm run build
 
-# Build development version
-RUN npm run build:development
+# Serve with nginx
+FROM nginx:alpine
 
-# Expose port
-EXPOSE 3000
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Start development server
-CMD ["npm", "run", "start:development"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     UserCircle,
     Home,
@@ -13,9 +13,8 @@ import {
 } from "lucide-react";
 import "./Header.css";
 
-const Header = () => {
+const Header = ({ bwellBaseUrl }) => {
     const location = useLocation();
-    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
     const isActive = (path) => {
@@ -24,37 +23,37 @@ const Header = () => {
 
     const navLinks = [
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL,
+            path: bwellBaseUrl,
             label: "Home",
             icon: Home,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/reports",
+            path: bwellBaseUrl + "/reports",
             label: "Reports",
             icon: FileText,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/sleep",
+            path: bwellBaseUrl + "/sleep",
             label: "Sleep",
             icon: Moon,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/activity",
+            path: bwellBaseUrl + "/activity",
             label: "Activity",
             icon: Activity,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/nutrition",
+            path: bwellBaseUrl + "/nutrition",
             label: "Nutrition",
             icon: Leaf,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/goals",
+            path: bwellBaseUrl + "/goals",
             label: "My Goals",
             icon: Flag,
         },
         {
-            path: import.meta.env.VITE_BWELL_BASE_URL + "/wallet",
+            path: bwellBaseUrl + "/wallet",
             label: "Wallet",
             icon: Wallet,
         },
@@ -64,7 +63,7 @@ const Header = () => {
         <header className="header">
             <div className="container">
                 <div className="header-left">
-                    <Link to={import.meta.env.VITE_BWELL_BASE_URL} className="logo">
+                    <Link to={bwellBaseUrl} className="logo">
                         <img
                             src="/lovable-uploads/765ffe1f-7f04-4b14-88a1-feb2561263a2.png"
                             alt="B-Well Logo"
@@ -113,21 +112,18 @@ const Header = () => {
                                         }`}
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        <link.icon className="icon" />
+                                        <link.icon className="mobile-nav-icon" />
                                         <span>{link.label}</span>
                                     </Link>
                                 ))}
                                 <Link
-                                    to={
-                                        import.meta.env.VITE_BWELL_BASE_URL +
-                                        "/profile"
-                                    }
+                                    to={bwellBaseUrl + "/profile"}
                                     className={`nav-link-mobile ${
                                         isActive("/profile") ? "active" : ""
                                     }`}
                                     onClick={() => setIsOpen(false)}
                                 >
-                                    <UserCircle className="icon" />
+                                    <UserCircle className="mobile-nav-icon" />
                                     <span>Profile</span>
                                 </Link>
                             </nav>
@@ -141,9 +137,7 @@ const Header = () => {
                     <button
                         className="profile-button"
                         onClick={() =>
-                            (window.location.href =
-                                import.meta.env.VITE_BWELL_BASE_URL +
-                                "/profile")
+                            (window.location.href = bwellBaseUrl + "/profile")
                         }
                     >
                         <UserCircle className="profile-icon" />

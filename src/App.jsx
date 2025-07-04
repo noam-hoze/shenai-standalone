@@ -3,31 +3,19 @@ import Header from "./components/Header";
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
-function ScanPage() {
+function ScanPage({ bwellBaseUrl }) {
     const [scanState, setScanState] = useState("idle"); // 'idle', 'scanning', 'complete'
     const [results, setResults] = useState(null);
     const [authToken, setAuthToken] = useState(null);
-    const [bwellBaseUrl, setBwellBaseUrl] = useState(
-        import.meta.env.VITE_BWELL_BASE_URL
-    ); // Default value
     const [progress, setProgress] = useState(0);
     const canvasRef = useRef(null);
     const shenaiSdkRef = useRef(null);
     const scanStartedRef = useRef(false);
 
     useEffect(() => {
-        // Extract auth token and env from URL on component mount
+        // Extract auth token from URL on component mount
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get("token");
-        const env = urlParams.get("env");
-
-        // Set the base URL for redirects based on the env parameter
-        if (env === "prod") {
-            setBwellBaseUrl("https://app.bwellai.com");
-        } else {
-            // Default to dev URL if env is 'dev' or not specified
-            setBwellBaseUrl("https://app-dev2.bwellai.com");
-        }
 
         if (token && !scanStartedRef.current) {
             scanStartedRef.current = true;
@@ -708,12 +696,30 @@ function ScanPage() {
 }
 
 function App() {
+    const [bwellBaseUrl, setBwellBaseUrl] = useState(
+        import.meta.env.VITE_BWELL_BASE_URL
+    );
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const env = urlParams.get("env");
+
+        if (env === "prod") {
+            setBwellBaseUrl("https://app.bwellai.com");
+        } else {
+            setBwellBaseUrl("https://app-dev2.bwellai.com");
+        }
+    }, []);
+
     return (
         <Router>
-            <Header />
+            <Header bwellBaseUrl={bwellBaseUrl} />
             <main className="main-content">
                 <Routes>
-                    <Route path="/" element={<ScanPage />} />
+                    <Route
+                        path="/"
+                        element={<ScanPage bwellBaseUrl={bwellBaseUrl} />}
+                    />
                     <Route path="/reports" element={<div>Reports Page</div>} />
                     <Route path="/sleep" element={<div>Sleep Page</div>} />
                     <Route

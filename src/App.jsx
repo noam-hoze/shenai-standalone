@@ -7,15 +7,28 @@ function ScanPage() {
     const [scanState, setScanState] = useState("idle"); // 'idle', 'scanning', 'complete'
     const [results, setResults] = useState(null);
     const [authToken, setAuthToken] = useState(null);
+    const [bwellBaseUrl, setBwellBaseUrl] = useState(
+        import.meta.env.VITE_BWELL_BASE_URL
+    ); // Default value
     const [progress, setProgress] = useState(0);
     const canvasRef = useRef(null);
     const shenaiSdkRef = useRef(null);
     const scanStartedRef = useRef(false);
 
     useEffect(() => {
-        // Extract auth token from URL on component mount
+        // Extract auth token and env from URL on component mount
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get("token");
+        const env = urlParams.get("env");
+
+        // Set the base URL for redirects based on the env parameter
+        if (env === "prod") {
+            setBwellBaseUrl("https://app.bwellai.com");
+        } else {
+            // Default to dev URL if env is 'dev' or not specified
+            setBwellBaseUrl("https://app-dev2.bwellai.com");
+        }
+
         if (token && !scanStartedRef.current) {
             scanStartedRef.current = true;
             setAuthToken(token);
@@ -178,8 +191,7 @@ function ScanPage() {
 
     const handleBackToDashboard = (e) => {
         if (e) e.preventDefault();
-        const baseUrl = import.meta.env.VITE_BWELL_BASE_URL;
-        window.location.href = `${baseUrl}/face-scan`;
+        window.location.href = `${bwellBaseUrl}/face-scan`;
     };
 
     const renderScanContainer = () => {
